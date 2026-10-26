@@ -1,0 +1,12 @@
+{
+  "name": "Farmer Loan \u0026 Subsidy Finder",
+  "description": "Find Your Eligible Schemes. Apply with Confidence. Comprehensive portal for Indian farmers to discover subsidies, agricultural loans, check rule-based eligibility, upload verified documents to Document Vault, track applications, and consult Krishi Sahayak AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

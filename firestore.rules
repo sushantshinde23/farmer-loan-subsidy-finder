@@ -1,0 +1,113 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny all access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Health check collection for connectivity test
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.email == "sushantshinde5598@gmail.com";
+    }
+
+    // 1. User Root Document: "users/{uid}"
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create, update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+
+      // "users/{uid}/farmerProfile/details"
+      match /farmerProfile/{docId} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+
+      // "users/{uid}/savedSchemes/{schemeId}"
+      match /savedSchemes/{schemeId} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+
+      // "users/{uid}/loanApplications/{applicationId}"
+      match /loanApplications/{applicationId} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+
+      // "users/{uid}/documents/{documentId}"
+      match /documents/{documentId} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+
+      // "users/{uid}/settings/preferences"
+      match /settings/{settingId} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+    }
+
+    // 2. Feedback Form Submissions: "feedback/{feedbackId}"
+    // Public readable, authenticated or citizen can create, no unauthorized edit/delete
+    match /feedback/{feedbackId} {
+      allow read: if true;
+      allow create: if request.resource.data.farmerName is string &&
+                       request.resource.data.rating is number &&
+                       request.resource.data.comments is string &&
+                       request.resource.data.rating >= 1 &&
+                       request.resource.data.rating <= 5;
+      allow update, delete: if isAdmin();
+    }
+
+    // 3. Top-Level Collections for Backward Compatibility & Officer Dashboards
+    match /farmerProfiles/{userId} {
+      allow read: if isSignedIn() && (userId == request.auth.uid || isAdmin());
+      allow write: if isSignedIn() && (userId == request.auth.uid || isAdmin());
+    }
+
+    match /savedSchemes/{savedId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    match /applications/{applicationId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    match /documents/{documentId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    match /notifications/{notificationId} {
+      allow read, update, delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn();
+    }
+
+    match /schemes/{schemeId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /auditLogs/{logId} {
+      allow create: if isSignedIn();
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

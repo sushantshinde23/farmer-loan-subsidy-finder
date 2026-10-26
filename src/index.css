@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --portal-primary: #253F1E;
+  --portal-primary-hover: #34592A;
+  --portal-accent: #E06D43;
+  --portal-bg: #F4F5ED;
+  --portal-card-bg: #FFFFFF;
+  --portal-border: #D2DCD0;
+  --portal-lime: #A2DB72;
+}
+
+[data-color-theme="forest"] {
+  --portal-primary: #253F1E;
+  --portal-primary-hover: #34592A;
+  --portal-accent: #E06D43;
+  --portal-bg: #F4F5ED;
+  --portal-card-bg: #FFFFFF;
+  --portal-border: #D2DCD0;
+  --portal-lime: #A2DB72;
+}
+
+[data-color-theme="emerald"] {
+  --portal-primary: #065F46;
+  --portal-primary-hover: #047857;
+  --portal-accent: #D97706;
+  --portal-bg: #F0FDF4;
+  --portal-card-bg: #FFFFFF;
+  --portal-border: #A7F3D0;
+  --portal-lime: #86EFAC;
+}
+
+[data-color-theme="navy"] {
+  --portal-primary: #1E3A8A;
+  --portal-primary-hover: #1D4ED8;
+  --portal-accent: #EA580C;
+  --portal-bg: #F8FAFC;
+  --portal-card-bg: #FFFFFF;
+  --portal-border: #CBD5E1;
+  --portal-lime: #38BDF8;
+}
+
+[data-color-theme="amber"] {
+  --portal-primary: #B45309;
+  --portal-primary-hover: #92400E;
+  --portal-accent: #0284C7;
+  --portal-bg: #FFFBEB;
+  --portal-card-bg: #FFFFFF;
+  --portal-border: #FDE68A;
+  --portal-lime: #FBBF24;
+}
+
+.dark {
+  --portal-bg: #141C13;
+  --portal-card-bg: #1B261A;
+  --portal-border: #2D3D2B;
+}
+
+/* Custom utility for clean horizontal overflow carousels */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Print Optimization for Eligibility Reports and Application Slips */
+@media print {
+  header, aside, nav, button, .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Target Acknowledgement Slip specifically during print */
+  body.printing-slip * {
+    visibility: hidden !important;
+  }
+  body.printing-slip #acknowledgement-slip-content,
+  body.printing-slip #acknowledgement-slip-content * {
+    visibility: visible !important;
+  }
+  body.printing-slip #acknowledgement-slip-content {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 24px !important;
+    margin: 0 !important;
+    background: white !important;
+  }
+}

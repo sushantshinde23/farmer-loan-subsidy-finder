@@ -1,0 +1,209 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with personal identity and contact info",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "mobile": { "type": "string" },
+        "role": { "type": "string" },
+        "state": { "type": "string" },
+        "district": { "type": "string" },
+        "village": { "type": "string" },
+        "isVerified": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "fullName", "email"]
+    },
+    "FarmerProfile": {
+      "title": "FarmerProfile",
+      "description": "Farmer cultivation and landholding profile",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "mobile": { "type": "string" },
+        "state": { "type": "string" },
+        "district": { "type": "string" },
+        "village": { "type": "string" },
+        "landAreaAcres": { "type": "number" },
+        "landOwnership": { "type": "string" },
+        "surveyNumber": { "type": "string" },
+        "primaryCrops": { "type": "string" },
+        "irrigationType": { "type": "string" },
+        "farmingType": { "type": "string" },
+        "farmerCategory": { "type": "string" },
+        "annualIncome": { "type": "number" },
+        "hasKisanCreditCard": { "type": "boolean" },
+        "bankName": { "type": "string" },
+        "ifscCode": { "type": "string" }
+      },
+      "required": ["userId"]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "Government subsidy and loan application submitted by farmer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "applicationNumber": { "type": "string" },
+        "userId": { "type": "string" },
+        "farmerName": { "type": "string" },
+        "farmerMobile": { "type": "string" },
+        "farmerDistrict": { "type": "string" },
+        "farmerState": { "type": "string" },
+        "schemeId": { "type": "string" },
+        "schemeName": { "type": "string" },
+        "schemeType": { "type": "string" },
+        "status": { "type": "string" },
+        "priority": { "type": "string" },
+        "subsidyClaimAmount": { "type": "number" },
+        "submittedAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "schemeId", "schemeName", "status", "submittedAt"]
+    },
+    "SavedScheme": {
+      "title": "SavedScheme",
+      "description": "Schemes bookmarked by farmer",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "schemeId": { "type": "string" },
+        "schemeName": { "type": "string" },
+        "savedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "schemeId", "schemeName"]
+    },
+    "UserDocument": {
+      "title": "UserDocument",
+      "description": "Farmer identity and land document metadata with storage paths",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "documentType": { "type": "string" },
+        "fileName": { "type": "string" },
+        "fileSize": { "type": "number" },
+        "mimeType": { "type": "string" },
+        "storagePath": { "type": "string" },
+        "downloadUrl": { "type": "string" },
+        "status": { "type": "string" },
+        "uploadedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "documentType", "fileName"]
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "Portal user interface preferences such as language, theme, and notifications",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "language": { "type": "string" },
+        "theme": { "type": "string" },
+        "colorTheme": { "type": "string" }
+      },
+      "required": ["userId"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "Citizen feedback and overall ratings for government services",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "farmerName": { "type": "string" },
+        "rating": { "type": "number" },
+        "comments": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "farmerName", "rating", "comments", "timestamp"]
+    },
+    "GovernmentScheme": {
+      "title": "GovernmentScheme",
+      "description": "National and state government agricultural subsidy and loan schemes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "department": { "type": "string" },
+        "subsidyAmountOrPercent": { "type": "string" },
+        "benefits": { "type": "string" }
+      },
+      "required": ["id", "name", "category"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app and system notification alerts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "message"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "Top-level user account record"
+    },
+    "/users/{uid}/farmerProfile/details": {
+      "schema": "FarmerProfile",
+      "description": "Farmer cultivation and landholding profile"
+    },
+    "/users/{uid}/loanApplications/{applicationId}": {
+      "schema": "Application",
+      "description": "Farmer applications subcollection"
+    },
+    "/users/{uid}/savedSchemes/{schemeId}": {
+      "schema": "SavedScheme",
+      "description": "Farmer saved schemes subcollection"
+    },
+    "/users/{uid}/documents/{documentId}": {
+      "schema": "UserDocument",
+      "description": "Farmer documents subcollection"
+    },
+    "/users/{uid}/settings/preferences": {
+      "schema": "UserPreferences",
+      "description": "User portal preferences"
+    },
+    "/applications/{applicationId}": {
+      "schema": "Application",
+      "description": "Application registry for officer review and status tracking"
+    },
+    "/farmerProfiles/{userId}": {
+      "schema": "FarmerProfile",
+      "description": "Farmer profile registry"
+    },
+    "/savedSchemes/{savedId}": {
+      "schema": "SavedScheme",
+      "description": "Farmer saved schemes"
+    },
+    "/documents/{documentId}": {
+      "schema": "UserDocument",
+      "description": "Farmer documents registry"
+    },
+    "/feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "Public feedback for website and government services"
+    },
+    "/schemes/{schemeId}": {
+      "schema": "GovernmentScheme",
+      "description": "Master government schemes catalog"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Farmer and officer notifications"
+    }
+  }
+}
